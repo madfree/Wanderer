@@ -44,10 +44,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val longitude = 11.351387
 
         val homeLatLong = LatLng(latitude, longitude)
-        val zoomLevel = 15f
+        val zoomLevel = 18f
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLong, zoomLevel))
         map.addMarker(MarkerOptions().position(homeLatLong))
+
+        // Adding a ground overlay image
+        val overlaySize = 100f
+        val androidOverlay = GroundOverlayOptions()
+            .image(BitmapDescriptorFactory.fromResource(R.drawable.android))
+            .position(homeLatLong, overlaySize)
+        map.addGroundOverlay(androidOverlay)
 
         setMapLongClick(map)
         setPoiClick(map)
