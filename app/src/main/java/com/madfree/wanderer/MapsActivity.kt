@@ -50,7 +50,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val longitude = 11.351387
 
         val homeLatLong = LatLng(latitude, longitude)
-        val zoomLevel = 18f
+        val zoomLevel = 15f
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLong, zoomLevel))
         map.addMarker(MarkerOptions().position(homeLatLong))
@@ -61,6 +61,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .image(BitmapDescriptorFactory.fromResource(R.drawable.android))
             .position(homeLatLong, overlaySize)
         map.addGroundOverlay(androidOverlay)
+
+        // Adding a polyline = route
+        val pos1 = LatLng(47.970915, 11.351026)
+        val pos2 = LatLng(47.971885, 11.353944)
+        val pos3 = LatLng(47.974356, 11.353096)
+        map.addPolyline(PolylineOptions()
+            .add(pos1, pos2, pos3))
 
         setMapLongClick(map)
         setPoiClick(map)
