@@ -45,6 +45,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLong, zoomLevel))
         map.addMarker(MarkerOptions().position(homeLatLong))
+
+        setMapLongClick(map)
+    }
+
+    fun setMapLongClick(map: GoogleMap) {
+        map.setOnMapLongClickListener { latlng ->
+            map.addMarker(
+                MarkerOptions().position(latlng)
+            )
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
