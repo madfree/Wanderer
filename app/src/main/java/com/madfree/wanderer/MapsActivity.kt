@@ -48,9 +48,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         map.addMarker(MarkerOptions().position(homeLatLong))
 
         setMapLongClick(map)
+        setPoiClick(map)
     }
 
-    fun setMapLongClick(map: GoogleMap) {
+    private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapLongClickListener { latlng ->
             val snippet = String.format(
                 Locale.getDefault(),
@@ -65,6 +66,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .title(getString(R.string.dropped_pin))
                     .snippet(snippet)
             )
+        }
+    }
+
+    private fun setPoiClick(map: GoogleMap) {
+        map.setOnPoiClickListener{poi ->
+            val poiMarker = map.addMarker(
+                MarkerOptions()
+                    .position(poi.latLng)
+                    .title(poi.name)
+            )
+            poiMarker.showInfoWindow()
         }
     }
 
