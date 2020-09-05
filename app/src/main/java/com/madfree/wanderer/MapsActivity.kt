@@ -10,20 +10,20 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import java.util.*
-import java.util.jar.Manifest
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
     private val TAG = MapsActivity::class.java.simpleName
     private val REQUEST_LOCATION_PERMISSION = 1
+    private val marker: MutableLiveData<LatLng> = MutableLiveData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,12 +62,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .position(homeLatLong, overlaySize)
         map.addGroundOverlay(androidOverlay)
 
-        // Adding a polyline = route
-        val pos1 = LatLng(47.970915, 11.351026)
-        val pos2 = LatLng(47.971885, 11.353944)
-        val pos3 = LatLng(47.974356, 11.353096)
-        map.addPolyline(PolylineOptions()
-            .add(pos1, pos2, pos3))
+        // Adding a polyline from the markers
+        val route = PolylineOptions()
+            .width(5f)
+            .color(R.color.colorPrimary)
+
+        marker.observe(this, androidx.lifecycle.Observer { pos ->
+            route.add(pos)
+            map.addPolyline(route)
+        })
 
         setMapLongClick(map)
         setPoiClick(map)
@@ -91,6 +94,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .snippet(snippet)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
             )
+            marker.value = latlng
         }
     }
 
